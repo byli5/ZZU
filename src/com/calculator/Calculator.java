@@ -46,18 +46,18 @@ public class Calculator extends JFrame implements ActionListener {
         JPanel pnlNorth = new JPanel();
         JPanel pnlCenter = new JPanel();
 
-        // 设置panel布局
+        // Set panel layout
         pnlNorth.setLayout(new BorderLayout());
         pnlCenter.setLayout(new GridLayout(4, 4, 3, 3));
 
-        // 定义字体风格
+        // Define font style
         Font font = new Font("黑体", Font.BOLD, 20);
 
-        // 把两个panel添加道容易中
+        // Add two panels to the container
         contentPane.add(BorderLayout.NORTH, pnlNorth);
         contentPane.add(BorderLayout.SOUTH, pnlCenter);
 
-        // 设置文本框
+        // Set text box
         txtResult = new JTextField();
         txtResult.setFont(font);
         txtResult.setEnabled(false);
@@ -118,7 +118,7 @@ public class Calculator extends JFrame implements ActionListener {
             // Clear button
             number.delete(0,number.length());
             txtResult.setText("0");
-        }else if ("0123456789.".indexOf(label) >= 0) {
+        } else if ("0123456789.".indexOf(label) >= 0) {
             // The treatment of decimal point
             if (".".indexOf(label)>=0){
                 if (number.length()==0){
