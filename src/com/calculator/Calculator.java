@@ -119,7 +119,19 @@ public class Calculator extends JFrame implements ActionListener {
             number.delete(0,number.length());
             txtResult.setText("0");
         }else if ("0123456789.".indexOf(label) >= 0) {
-            number.append(label);
+            // The treatment of decimal point
+            if (".".indexOf(label)>=0){
+                if (number.length()==0){
+                    number.append("0.");
+                }else if (number.toString().indexOf(".")==-1){
+                    number.append(".");
+                }else {
+                    number.append("");
+                }
+            }else {
+                number.append(label);
+            }
+
             txtResult.setText(number.toString());
         }else {
             handleOperator(label);
