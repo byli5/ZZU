@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @author: byLi
@@ -118,20 +119,10 @@ public class Calculator extends JFrame implements ActionListener {
             // Clear button
             number.delete(0,number.length());
             txtResult.setText("0");
-        } else if ("0123456789.".indexOf(label) >= 0) {
-            // The treatment of decimal point
-            if (".".indexOf(label)>=0){
-                if (number.length()==0){
-                    number.append("0.");
-                }else if (number.toString().indexOf(".")==-1){
-                    number.append(".");
-                }else {
-                    number.append("");
-                }
-            }else {
-                number.append(label);
-            }
-
+        } else if (".".equals(label)){
+            point();
+        } else if ("0123456789".indexOf(label) >= 0) {
+            number.append(label);
             txtResult.setText(number.toString());
         }else {
             handleOperator(label);
@@ -175,7 +166,9 @@ public class Calculator extends JFrame implements ActionListener {
                         if (new BigDecimal("0").equals(number2)){
                             validFlag = false;
                         }else {
-                            result = number1.divide(number2);
+                            // edit 2020.12.27 reason:When doing division, try to use divide (big decimal divisor, int scale, int roundingmode).
+                            // If this method does not specify the number of decimal places to be reserved, an error will be reported in case of endless division
+                            result = number1.divide(number2, 2, RoundingMode.HALF_UP);
                         }
                         break;
 
@@ -192,6 +185,21 @@ public class Calculator extends JFrame implements ActionListener {
         }else {
             txtResult.setText("请输入第一个操作数!");
         }
+    }
+
+
+    /**
+     * The logic of dealing with decimal point
+     */
+    private void point(){
+        if (number.length()==0){
+            number.append("0.");
+        }else if (number.toString().indexOf(".")==-1){
+            number.append(".");
+        }else {
+            number.append("");
+        }
+        txtResult.setText(number.toString());
     }
 
 
