@@ -1,101 +1,37 @@
 package com.calculator;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
 /**
  * @author: byLi
- * @date: 2020/12/29 10:29
- * @description:Using stack to realize computing logic
- *
+ * @date: 2020/12/29 14:34
+ * @description:
  */
-public class Calculator2 extends JFrame implements ActionListener {
+public class StackActionListener implements ActionListener {
 
-    // JTextField object
     JTextField txtResult;
     private static StringBuffer number = new StringBuffer("");
-    BigDecimal number1 = new BigDecimal("0");
-    BigDecimal number2 = new BigDecimal("0");
-    // Used to identify operators
-    private static String flag = "=";
-    //Judge whether divisor is zero
-    boolean validFlag = true;
-
-    private static final String CLEAR = "清空";
-    private static final String BACK = "退格";
-
-    public Calculator2() {
-        setTitle("计算器");
-        setSize(300, 270);
-        setResizable(false);
-        //When the window is set to null, the window will be displayed at the center of the screen,
-        // otherwise it will be displayed in the upper left corner.
-        setLocationRelativeTo(null);
-        // Set the closing mode of the form
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Get a container object
-        Container contentPane = this.getContentPane();
-        // Border layout
-        contentPane.setLayout(new BorderLayout(1, 5));
-
-        // Create two new panel objects
-        JPanel pnlNorth = new JPanel();
-        JPanel pnlCenter = new JPanel();
-
-        // Set panel layout
-        pnlNorth.setLayout(new BorderLayout());
-        pnlCenter.setLayout(new GridLayout(4, 4, 3, 3));
-
-        // Define font style
-        Font font = new Font("黑体", Font.BOLD, 20);
-
-        // Add two panels to the container
-        contentPane.add(BorderLayout.NORTH, pnlNorth);
-        contentPane.add(BorderLayout.SOUTH, pnlCenter);
-
-        // Set text box
-        txtResult = new JTextField();
-        txtResult.setFont(font);
-        txtResult.setEnabled(false);
 
 
-        // Set the clear button and backspace button
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setPreferredSize(new Dimension(300,20));
-        JButton btnBack = new JButton(BACK);
-        JButton btnClear = new JButton(CLEAR);
-        btnBack.addActionListener(this);
-        btnClear.addActionListener(this);
-        panel.add(btnBack);
-        panel.add(btnClear);
-        contentPane.add(BorderLayout.CENTER, panel);
+    public JTextField getTxtResult() {
+        return txtResult;
+    }
 
-        // Place the text box and clear button in the top panel
-        pnlNorth.add(BorderLayout.CENTER, txtResult);
+    public void setTxtResult(JTextField txtResult) {
+        this.txtResult = txtResult;
+    }
 
-        //  Put numbers and operators into the pnlcentre panel, and set font size and bind listening events
-        String[] captions = {"7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "*", "0", ".", "/", "=",};
-        int length = captions.length;
-        for (int i = 0; i < length; i++) {
-            JButton button = new JButton(captions[i]);
-            button.setFont(font);
-            pnlCenter.add(button);
-            button.addActionListener(this);
-        }
+    public StackActionListener(){
 
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new Calculator2();
-        frame.setVisible(true);
-
+    public StackActionListener(JTextField txtResult) {
+        this.txtResult = txtResult;
     }
 
     /**
@@ -107,7 +43,7 @@ public class Calculator2 extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String label = e.getActionCommand();
 
-        if (BACK.equals(label)) {
+        if (CalConstant.BACK.equals(label)) {
             // Backspace button
             // To prevent crossing the border, add a judgment
             if (number.length() > 0) {
@@ -116,7 +52,7 @@ public class Calculator2 extends JFrame implements ActionListener {
             } else {
                 txtResult.setText("0");
             }
-        }else if (CLEAR.equals(label)) {
+        }else if (CalConstant.CLEAR.equals(label)) {
             // Clear button
             number.delete(0,number.length());
             txtResult.setText("0");
@@ -191,4 +127,5 @@ public class Calculator2 extends JFrame implements ActionListener {
         if(c=='+'||c=='-'||c=='*'||c=='/'||c=='#') return true;
         return false;
     }
+
 }
