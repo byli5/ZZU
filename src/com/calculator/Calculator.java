@@ -50,7 +50,7 @@ public class Calculator extends JFrame implements ActionListener {
         pnlCenter.setLayout(new GridLayout(4, 4, 3, 3));
 
         // Define font style
-        Font font = new Font("黑体", Font.BOLD, 20);
+        Font font = new Font(CalConstant.FONT_STYLE, Font.BOLD, 20);
 
         // Add two panels to the container
         contentPane.add(BorderLayout.NORTH, pnlNorth);

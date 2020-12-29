@@ -32,4 +32,6 @@ public class CalConstant {
 
     public static final String INPUT_FIRT_SIGN = "请输入第一个操作数!";
 
+    public static final String FONT_STYLE = "黑体";
+
 }
