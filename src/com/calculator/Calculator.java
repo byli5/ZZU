@@ -25,8 +25,6 @@ public class Calculator extends JFrame implements ActionListener {
     //Judge whether divisor is zero
     boolean validFlag = true;
 
-    private final String CLEAR = "清空";
-    private final String BACK = "退格";
 
     public Calculator() {
         setTitle("计算器");
@@ -67,8 +65,8 @@ public class Calculator extends JFrame implements ActionListener {
         // Set the clear button and backspace button
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panel.setPreferredSize(new Dimension(300,20));
-        JButton btnBack = new JButton(BACK);
-        JButton btnClear = new JButton(CLEAR);
+        JButton btnBack = new JButton(CalConstant.BACK);
+        JButton btnClear = new JButton(CalConstant.CLEAR);
         btnBack.addActionListener(this);
         btnClear.addActionListener(this);
         panel.add(btnBack);
@@ -106,20 +104,20 @@ public class Calculator extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String label = e.getActionCommand();
 
-        if (BACK.equals(label)) {
+        if (CalConstant.BACK.equals(label)) {
             // Backspace button
             // To prevent crossing the border, add a judgment
             if (number.length() > 0) {
                 number.deleteCharAt(number.length() - 1);
                 txtResult.setText(number.toString());
             } else {
-                txtResult.setText("0");
+                txtResult.setText(CalConstant.ZERO);
             }
-        }else if (CLEAR.equals(label)) {
+        }else if (CalConstant.CLEAR.equals(label)) {
             // Clear button
             number.delete(0,number.length());
-            txtResult.setText("0");
-        } else if (".".equals(label)){
+            txtResult.setText(CalConstant.ZERO);
+        } else if (CalConstant.POINT.equals(label)){
             point();
         } else if ("0123456789".indexOf(label) >= 0) {
             number.append(label);
@@ -148,22 +146,22 @@ public class Calculator extends JFrame implements ActionListener {
                 txtResult.setText(null);
             }
 
-            if (label.equals("=")) {
+            if (CalConstant.EQUAL.equals(label)) {
                 number2 = new BigDecimal(number.toString());
                 number.delete(0, number.length());
-                BigDecimal result = new BigDecimal("0");
+                BigDecimal result = new BigDecimal(CalConstant.ZERO);
                 switch (flag) {
-                    case "*":
+                    case CalConstant.MULTIPLY:
                         result = number1.multiply(number2);
                         break;
-                    case "-":
+                    case CalConstant.REDUCE:
                         result = number1.subtract(number2);
                         break;
-                    case "+":
+                    case CalConstant.PLUS:
                         result = number1.add(number2);
                         break;
-                    case "/":
-                        if (new BigDecimal("0").equals(number2)){
+                    case CalConstant.DIVIDE:
+                        if (new BigDecimal(CalConstant.ZERO).equals(number2)){
                             validFlag = false;
                         }else {
                             // edit 2020.12.27 reason:When doing division, try to use divide (big decimal divisor, int scale, int roundingmode).
@@ -177,13 +175,13 @@ public class Calculator extends JFrame implements ActionListener {
                 if (validFlag) {
                     txtResult.setText(String.valueOf(result));
                 }else {
-                    txtResult.setText("除数不能为零");
+                    txtResult.setText(CalConstant.DIVIDE_BYZERO_INFO);
                     validFlag = true;
                 }
                 number.append(result);
             }
         }else {
-            txtResult.setText("请输入第一个操作数!");
+            txtResult.setText(CalConstant.INPUT_FIRT_SIGN);
         }
     }
 
