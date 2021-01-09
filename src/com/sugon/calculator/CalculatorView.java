@@ -1,11 +1,8 @@
-package com.calculator;
+package com.sugon.calculator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * @author: byLi
@@ -13,11 +10,11 @@ import java.math.RoundingMode;
  * @description:To realize the function of addition, subtraction, multiplication and division of calculator
  */
 
-public class CalculatorView extends JFrame{
+public class CalculatorView extends JFrame {
 
-     JTextField txtResult = new JTextField();
+    private JTextField txtResult = new JTextField();
 
-     ActionListener listener;
+    private ActionListener listener;
 
     public JTextField getTxtResult() {
         return txtResult;
@@ -39,7 +36,7 @@ public class CalculatorView extends JFrame{
 
     }
 
-    public void init(){
+    public void init() {
         setTitle("计算器");
         setSize(300, 270);
         setResizable(false);
@@ -79,7 +76,7 @@ public class CalculatorView extends JFrame{
 
         // Set the clear button and backspace button
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setPreferredSize(new Dimension(300,20));
+        panel.setPreferredSize(new Dimension(300, 20));
         JButton btnBack = new JButton(CalConstant.BACK);
         JButton btnClear = new JButton(CalConstant.CLEAR);
         btnBack.addActionListener(listener);

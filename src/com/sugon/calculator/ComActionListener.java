@@ -1,4 +1,4 @@
-package com.calculator;
+package com.sugon.calculator;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,14 +13,14 @@ import java.math.RoundingMode;
  */
 public class ComActionListener implements ActionListener{
 
-    JTextField txtResult;
-    static StringBuffer number = new StringBuffer("");
-    BigDecimal number1 = new BigDecimal("0");
-    BigDecimal number2 = new BigDecimal("0");
+    private JTextField txtResult;
+    private static StringBuffer number = new StringBuffer("");
+    private BigDecimal number1 = new BigDecimal("0");
+    private BigDecimal number2 = new BigDecimal("0");
     // Used to identify operators
     private static String flag = "=";
     //Judge whether divisor is zero
-    boolean validFlag = true;
+    private boolean validFlag = true;
 
     public JTextField getTxtResult() {
         return txtResult;
