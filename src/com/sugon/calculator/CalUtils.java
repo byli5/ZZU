@@ -61,7 +61,7 @@ public class CalUtils {
                     numStack.push(a*tempNum);
                 }else if (lastOp == '/'){
                     if (tempNum == 0){
-                        return "除数不能为零！";
+                        return CalConstant.DIVIDE_BYZERO_INFO;
                     }
                     int a = numStack.pop();
                     numStack.push(a/tempNum);
