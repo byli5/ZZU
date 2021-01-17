@@ -11,16 +11,16 @@ import java.util.List;
  */
 public class ReadMessage {
 
-    public List<String> readMessageFromTxt(String name){
+    public List<String> readMessageFromTxt(String fileName){
         List<String> list = new ArrayList<>();
-        File file = new File(name);
+        File file = new File(fileName);
         FileReader fr = null;
         BufferedReader bf = null;
         try {
             fr = new FileReader(file);
             bf = new BufferedReader(fr);
             String str;
-            // 按行读取
+            // Read by line
             while ((str=bf.readLine())!=null){
                 list.add(str);
             }

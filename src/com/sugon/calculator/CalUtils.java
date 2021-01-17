@@ -1,5 +1,9 @@
 package com.sugon.calculator;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -17,15 +21,30 @@ public class CalUtils {
      * @param list
      * @return
      */
-    public static List<String> calculate(List<String> list){
+    public static List<String> calculate(List<String> list) throws IOException {
         long startTime = System.currentTimeMillis();
 
+        String name = "E:\\result.txt";
+        File file = new File(name);
+       // If the file does not exist, create it
+        if (!file.exists()){
+            file.createNewFile();
+        }
+        FileWriter fw = new FileWriter(file,true);
+        BufferedWriter bw = new BufferedWriter(fw);
         List<String> results = new ArrayList<>();
         for (String str : list) {
             String value = calculate(str);
+//            fw.write(value+"\r\n");
+            bw.write(value);
+            bw.newLine();
+            // Update data to file
+            bw.flush();
             results.add(value);
         }
-
+        bw.close();
+        fw.close();
+        System.out.println("文件写入完毕！");
         long endTime = System.currentTimeMillis();
         System.out.println("请求耗时:" + (endTime - startTime) + "ms");
 
