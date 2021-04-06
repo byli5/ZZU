@@ -1,4 +1,5 @@
-package com.sugon.chat3;
+package com.sugon.chatRoom;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,14 +18,21 @@ import java.util.Date;
  */
 public class ClientFrame {
 
-    private TextField textFieldContent = new TextField();
-    private TextArea textAreaContent = new TextArea();
+    private TextField textField = new TextField(25);
+    //    private TextArea textAreaContent = new TextArea();
+    //-------begin--------
+    JPanel jPanel1 = new JPanel();
+    JPanel jPanel = new JPanel();
+    JScrollPane jScrollPane = new JScrollPane(jPanel1);
+
+    //---end---------------
+
     private Socket socket = null;
     private OutputStream out = null;
     private DataOutputStream dos = null;
     private InputStream in = null;
     private DataInputStream dis = null;
-    private  BufferedWriter bw = null;
+    private BufferedWriter bw = null;
     StringBuffer buffer = null;
 
     // clinetName
@@ -35,36 +43,33 @@ public class ClientFrame {
         buffer = new StringBuffer();
     }
 
-
     /**
      * Function:Interface initialization
      */
-    public void init(){
+    public void init() {
         // Create form
         JFrame frame = new JFrame(clientName);
-        frame.setLayout(null);
-        // Set size and location
-        frame.setSize(400, 300);
-        frame.setLocation(100, 200);
+        frame.setBounds(300, 300, 300, 400);
+        frame.setResizable(false);
 
-        // Set the send button
         JButton button = new JButton("发送");
-        button.setBounds(290, 220, 80, 30);
-        frame.add(button);
-        button.addActionListener(new BListener());
 
-        textFieldContent.setBounds(10, 220, 260, 30);
-        frame.add(textFieldContent);
+        //---edit  begin 2021/4/6----
+        frame.add(jScrollPane, BorderLayout.CENTER);
+        jPanel1.setLayout(new GridLayout(100, 1));
+        frame.add(jPanel, BorderLayout.SOUTH);
+        jPanel.add(textField);
+        jPanel.add(button);
 
-        textAreaContent.setBounds(10, 10, 360, 200);
-        frame.add(textAreaContent);
-
+        //---edit  end 2021/4/6----
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         // Make a connection
         this.connect();
+        button.addActionListener(new BListener());
         bw = FileUtils.createWriteFlow(clientName);
-        new Thread(new ClientThread(dis,textAreaContent,bw)).start();
+        // Start multithreading
+        new Thread(new ClientThread(dis,jPanel1, bw)).start();
     }
 
     /**
@@ -93,33 +98,43 @@ public class ClientFrame {
     private class BListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String message = clientName+":"+textFieldContent.getText().trim();
-            if (message != null && !message.equals("")) {
-                String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                buffer.append(time).append("\n");
-                buffer.append(message).append("\n");
-//                textAreaContent.append(time + "\n" + message + "\n");
-                textAreaContent.append(buffer.toString());
-                textFieldContent.setText("");
-                FileUtils.saveMessage(buffer.toString(),bw);
-                sendMessageToServer(message);
-                buffer.delete(0,buffer.length());
+            String text = textField.getText();
+            if (text == null || ("").equals(text)) {
+                JOptionPane.showMessageDialog(null, "消息不能为空");
+                return;
             }
+            // send message
+            sendMessageToServer(text);
+            String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            buffer.append(time).append("\n");
+            String message = clientName + ":" + textField.getText().trim();
+            buffer.append(message).append("\n");
+            textField.setText("");
+            // saveMessage to file
+            FileUtils.saveMessage(buffer.toString(), bw);
+            buffer.delete(0, buffer.length());
         }
     }
 
     /**
      * Function: send message to server
      *
-     * @param message
+     * @param text
      */
-    private void sendMessageToServer(String message) {
+    private void sendMessageToServer(String text) {
         try {
-            dos.writeUTF(message);
+            dos.writeUTF(clientName + ":" + textField.getText().trim());
             dos.flush();
+
+            JLabel tempLabel = new JLabel(   text + " : 我 "+" "  +"\n");
+            tempLabel.setHorizontalAlignment(JLabel.RIGHT);
+            jPanel1.add(tempLabel);
+            tempLabel.revalidate();
+
         } catch (IOException e) {
             System.out.println("发送消息失败");
             e.printStackTrace();
         }
     }
+
 }

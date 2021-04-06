@@ -1,6 +1,6 @@
-package com.sugon.chat3;
+package com.sugon.chatRoom;
 
-import java.awt.*;
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -17,13 +17,13 @@ import java.util.Date;
 public class ClientThread implements Runnable {
 
     private DataInputStream dis;
-    private TextArea textArea;
+    private JPanel jPanel;
     private BufferedWriter bw;
     StringBuffer buffer = null;
 
-    public ClientThread(DataInputStream dis, TextArea textArea,BufferedWriter bw) {
+    public ClientThread(DataInputStream dis, JPanel jPanel,BufferedWriter bw) {
         this.dis = dis;
-        this.textArea = textArea;
+        this.jPanel = jPanel;
         this.bw = bw;
         buffer = new StringBuffer();
     }
@@ -34,14 +34,14 @@ public class ClientThread implements Runnable {
         try {
             while (true) {
                 String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                String message = dis.readUTF();
-//                textArea.append(time + "\n" + message + "\n");
-                buffer.append(time).append("\n").append(message).append("\n");
-                textArea.append(buffer.toString());
-//                FileUtils.saveMessage(time + "\n" + message.toString(),bw);
+                String str = dis.readUTF();
+                buffer.append(time).append("\n").append(str).append("\n");
+                JLabel tempLabel = new JLabel(str);
+                jPanel.add(tempLabel);
+                jPanel.revalidate();
+                System.out.println("接收到的消息："+str);
                 FileUtils.saveMessage(buffer.toString(),bw);
                 buffer.delete(0,buffer.length());
-
             }
         } catch (EOFException e) {
             System.out.println("客户端已关闭");
